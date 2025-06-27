@@ -430,28 +430,24 @@ services:
         - "traefik.enable=true"
         - "traefik.docker.network=traefik_web"
         
-        # Main mailcow frontend (mail.domain.com)
-        - "traefik.http.routers.mailcow-frontend.rule=Host(`mail.domain.com`)"
+        - "traefik.http.routers.mailcow-frontend.rule=Host(`mailcow.urpuppy.com`)"
         - "traefik.http.routers.mailcow-frontend.entrypoints=websecure"
         - "traefik.http.routers.mailcow-frontend.tls=true"
         - "traefik.http.routers.mailcow-frontend.tls.certresolver=cloudflare"
         - "traefik.http.routers.mailcow-frontend.service=mailcow-frontend"
         
-        # MX hostname for ACME challenges (mx.domain.com)
-        - "traefik.http.routers.mailcow-acme.rule=Host(`mx.domain.com`) && PathPrefix(`/.well-known/acme-challenge/`)"
+        - "traefik.http.routers.mailcow-acme.rule=Host(`mx.urpuppy.com`) && PathPrefix(`/.well-known/acme-challenge/`)"
         - "traefik.http.routers.mailcow-acme.entrypoints=web"
         - "traefik.http.routers.mailcow-acme.tls=false"
         - "traefik.http.routers.mailcow-acme.service=mailcow-acme"
         
-        # Autoconfig for email clients (autoconfig.domain.com)
-        - "traefik.http.routers.mailcow-autoconfig.rule=Host(`autoconfig.domain.com`)"
+        - "traefik.http.routers.mailcow-autoconfig.rule=Host(`autoconfig.urpuppy.com`)"
         - "traefik.http.routers.mailcow-autoconfig.entrypoints=websecure"
         - "traefik.http.routers.mailcow-autoconfig.tls=true"
         - "traefik.http.routers.mailcow-autoconfig.tls.certresolver=cloudflare"
         - "traefik.http.routers.mailcow-autoconfig.service=mailcow-frontend"
         
-        # Autodiscover for email clients (autodiscover.domain.com)
-        - "traefik.http.routers.mailcow-autodiscover.rule=Host(`autodiscover.domain.com`)"
+        - "traefik.http.routers.mailcow-autodiscover.rule=Host(`autodiscover.urpuppy.com`)"
         - "traefik.http.routers.mailcow-autodiscover.entrypoints=websecure"
         - "traefik.http.routers.mailcow-autodiscover.tls=true"
         - "traefik.http.routers.mailcow-autodiscover.tls.certresolver=cloudflare"

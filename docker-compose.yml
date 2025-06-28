@@ -430,6 +430,7 @@ services:
         mailcow-network:
           aliases:
             - nginx
+      web:
 
     acme-mailcow:
       depends_on:

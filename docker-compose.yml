@@ -447,6 +447,12 @@ services:
         - "traefik.http.routers.mailcow-autoconfig.tls.certresolver=myresolver"
         - "traefik.http.routers.mailcow-autoconfig.service=mailcow-frontend"
         
+        - "traefik.http.routers.mailcow-mx.rule=Host(`mx.urpuppy.com`)"
+        - "traefik.http.routers.mailcow-mx.entrypoints=app-secure"
+        - "traefik.http.routers.mailcow-mx.tls=true"
+        - "traefik.http.routers.mailcow-mx.tls.certresolver=myresolver"
+        - "traefik.http.routers.mailcow-mx.service=mailcow-frontend"
+
         - "traefik.http.routers.mailcow-autodiscover.rule=Host(`autodiscover.urpuppy.com`)"
         - "traefik.http.routers.mailcow-autodiscover.entrypoints=app-secure"
         - "traefik.http.routers.mailcow-autodiscover.tls=true"

@@ -426,42 +426,11 @@ services:
         - ./data/web/inc/sessions.inc.php:/mailcowauth/sessions.inc.php:z
         - sogo-web-vol-1:/usr/lib/GNUstep/SOGo/
       restart: always
-      labels:
-        - "traefik.enable=true"
-        - "traefik.docker.network=traefik_web"
-        
-        - "traefik.http.routers.mailcow-acme.rule=Host(`mx.urpuppy.com`) && PathPrefix(`/.well-known/acme-challenge/`)"
-        - "traefik.http.routers.mailcow-acme.entrypoints=app"
-        - "traefik.http.routers.mailcow-acme.tls=false"
-        - "traefik.http.routers.mailcow-acme.service=mailcow-acme"
-        
-        - "traefik.http.routers.mailcow-autoconfig.rule=Host(`autoconfig.urpuppy.com`)"
-        - "traefik.http.routers.mailcow-autoconfig.entrypoints=app-secure"
-        - "traefik.http.routers.mailcow-autoconfig.tls=true"
-        - "traefik.http.routers.mailcow-autoconfig.tls.certresolver=myresolver"
-        - "traefik.http.routers.mailcow-autoconfig.service=mailcow-frontend"
-        
-        - "traefik.http.routers.mailcow-mx.rule=Host(`mx.urpuppy.com`)"
-        - "traefik.http.routers.mailcow-mx.entrypoints=app-secure"
-        - "traefik.http.routers.mailcow-mx.tls=true"
-        - "traefik.http.routers.mailcow-mx.tls.certresolver=myresolver"
-        - "traefik.http.routers.mailcow-mx.service=mailcow-frontend"
-
-        - "traefik.http.routers.mailcow-autodiscover.rule=Host(`autodiscover.urpuppy.com`)"
-        - "traefik.http.routers.mailcow-autodiscover.entrypoints=app-secure"
-        - "traefik.http.routers.mailcow-autodiscover.tls=true"
-        - "traefik.http.routers.mailcow-autodiscover.tls.certresolver=myresolver"
-        - "traefik.http.routers.mailcow-autodiscover.service=mailcow-frontend"
-        
-        # Services definitions
-        - "traefik.http.services.mailcow-frontend.loadbalancer.server.port=80"
-        - "traefik.http.services.mailcow-acme.loadbalancer.server.port=80"
         
       networks:
         mailcow-network:
           aliases:
             - nginx
-        web:
 
     acme-mailcow:
       depends_on:
@@ -658,6 +627,35 @@ services:
         mailcow-network:
           aliases:
             - ofelia
+
+    ipv6nat-mailcow:
+      depends_on:
+        - unbound-mailcow
+        - mysql-mailcow
+        - redis-mailcow
+        - clamd-mailcow
+        - rspamd-mailcow
+        - php-fpm-mailcow
+        - sogo-mailcow
+        - dovecot-mailcow
+        - postfix-mailcow
+        - memcached-mailcow
+        - nginx-mailcow
+        - acme-mailcow
+        - netfilter-mailcow
+        - watchdog-mailcow
+        - dockerapi-mailcow
+      environment:
+        - TZ=${TZ}
+      image: robbertkl/ipv6nat
+      security_opt:
+        - label=disable
+      restart: always
+      privileged: true
+      network_mode: "host"
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock:ro
+        - /lib/modules:/lib/modules:ro
 
 networks:
   web:

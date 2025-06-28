@@ -660,7 +660,7 @@ services:
 
 networks:
   web:
-    name: traefik_web
+    name: traefik_net
     external: true
   mailcow-network:
     driver: bridge
